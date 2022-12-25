@@ -10,7 +10,7 @@ services:
       - jenkins_home:/var/jenkins_home
       - ./jenkins_conf:/var/jenkins_conf
     environment:
-      - CASC_JENKINS_CONFIG:/var/jenkins_conf/jenkins.yaml
+      - CASC_JENKINS_CONFIG=/var/jenkins_conf/jenkins.yaml
     restart: always
 volumes:
   jenkins_home:

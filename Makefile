@@ -6,7 +6,7 @@ down:
 
 up:
 	sudo docker pull jenkins/jenkins:2.383-jdk11
-	sudo docker compose up
+	sudo docker compose up --build -d
 
 bash:
 	sudo docker compose exec jenkins bash

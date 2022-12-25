@@ -2,14 +2,66 @@ jenkins:
   securityRealm:
     local:
       users:
-        - id: admin
-          password: password
-        - id: myuser
-          password: mypassword
+        - id: "admin"
+          password: "password"
+        - id: "mydeveloper"
+          name: "sample developer"
+          password: "mypassword"
+        - id: "myviewer"
+          name: "sample viewer"
+          password: "mypassword"
   authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+          - name: "config-user"
+            permissions:
+              - "Job/Move"
+              - "Job/Build"
+              - "Job/Create"
+              - "View/Create"
+              - "Job/Discover"
+              - "Job/Read"
+              - "Credentials/View"
+              - "Run/Replay"
+              - "Run/Delete"
+              - "Job/Cancel"
+              - "Overall/Read"
+              - "Run/Update"
+              - "Job/Delete"
+              - "View/Delete"
+              - "Job/Configure"
+              - "Job/Workspace"
+              - "View/Read"
+              - "View/Configure"
+              - "Job/ViewStatus"
+            assignments:
+              - "mydeveloper"
+          - name: "build-user"
+            permissions:
+              - "Job/Cancel"
+              - "Overall/Read"
+              - "Job/Build"
+              - "Job/Discover"
+              - "Job/Read"
+              - "Job/Workspace"
+              - "View/Read"
+              - "Credentials/View"
+              - "Run/Replay"
+              - "Job/ViewStatus"
+            assignments:
+              - "authenticated"
 
 jobs:
   - file: /var/jenkins_conf/jobs/sample_job.groovy
   - file: /var/jenkins_conf/jobs/sample_pipeline.groovy
+
+unclassified:
+  location:
+    adminAddress: "まだアドレスが設定されていません。 <nobody@nowhere>"
+    url: "http://localhost:8080/"

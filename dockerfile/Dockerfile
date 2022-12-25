@@ -1,15 +1,15 @@
 FROM jenkins/jenkins:2.383-jdk11
 
 USER root
-RUN apt-get update && apt-get install -y vim iputils-ping net-tools tzdata && apt-get clean
+RUN apt-get update && apt-get install -y vim iputils-ping net-tools tzdata graphviz openssl && apt-get clean
 
-# RUN apt-get update && apt-get install -y lsb-release
-# RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc https://download.docker.com/linux/debian/gpg
-# RUN echo "deb [arch=$(dpkg --print-architecture) \
-#   signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
-#   https://download.docker.com/linux/debian \
-#   $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
-# RUN apt-get update && apt-get install -y docker-ce-cli vim iputils-ping net-tools tzdata && apt-get clean
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli vim iputils-ping net-tools tzdata && apt-get clean
 ENV TZ Asia/Tokyo
 
 
@@ -18,14 +18,16 @@ ENV TZ Asia/Tokyo
 ENV DOCKER_GROUP_GID 999
 RUN groupadd -o -g ${DOCKER_GROUP_GID} docker
 RUN usermod -g docker jenkins
+RUN mkdir /var/log/jenkins && chown jenkins:docker /var/log/jenkins
 
 USER jenkins
 
 ENV JENKINS_HOME /var/jenkins_home
-ENV JAVA_OPTS=-Duser.timezone=Asia/Tokyo
+ENV JAVA_OPTS="-Duser.timezone=Asia/Tokyo -Djava.util.logging.config.file=/usr/share/jenkins/ref/logging.properties"
 
 # Jenkinsプラグインをインストール
 COPY plugins_extra.txt /usr/share/jenkins/ref/plugins_extra.txt
+COPY logging.properties /usr/share/jenkins/ref/logging.properties
 RUN /bin/jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins_extra.txt
 
 
