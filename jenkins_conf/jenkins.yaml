@@ -1,0 +1,15 @@
+jenkins:
+  securityRealm:
+    local:
+      users:
+        - id: admin
+          password: password
+        - id: myuser
+          password: mypassword
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+jobs:
+  - file: /var/jenkins_conf/jobs/sample_job.groovy
+  - file: /var/jenkins_conf/jobs/sample_pipeline.groovy
