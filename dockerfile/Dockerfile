@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.383-jdk11
+FROM docker.io/jenkins/jenkins:2.383-jdk11
 
 USER root
 RUN apt-get update && apt-get install -y vim iputils-ping net-tools tzdata graphviz openssl && apt-get clean
@@ -25,9 +25,12 @@ USER jenkins
 ENV JENKINS_HOME /var/jenkins_home
 ENV JAVA_OPTS="-Duser.timezone=Asia/Tokyo -Djava.util.logging.config.file=/usr/share/jenkins/ref/logging.properties"
 
-# Jenkinsプラグインをインストール
-COPY plugins_extra.txt /usr/share/jenkins/ref/plugins_extra.txt
+# Jenkinsプラグインをインストール(実行時に自動ダウンロード)
+#COPY plugins_extra.txt /usr/share/jenkins/ref/plugins_extra.txt
+#RUN /bin/jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins_extra.txt
+# Jenkinsプラグインをインストール(事前にダウンロード)
+COPY *.hpi /var/jenkins_home/plugins/
+
 COPY logging.properties /usr/share/jenkins/ref/logging.properties
-RUN /bin/jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins_extra.txt
 
 

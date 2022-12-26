@@ -1,12 +1,12 @@
 down:
-	sudo docker compose down
+	podman-compose down
 	sudo rm -rf /var/lib/docker/volumes/jenkins-configuration-as-code_jenkins_home
-	sudo docker volume rm jenkins-configuration-as-code_jenkins_home
-	sudo docker rmi jenkins-configuration-as-code-jenkins
+	podman volume rm jenkins-configuration-as-code_jenkins_home
+	podman rmi jenkins-configuration-as-code-jenkins
 
 up:
-	sudo docker pull jenkins/jenkins:2.383-jdk11
-	sudo docker compose up --build -d
+	#podman pull docker.io/jenkins/jenkins:2.383-jdk11
+	podman-compose up --build -d
 
 bash:
-	sudo docker compose exec jenkins bash
+	podman-compose exec jenkins bash
